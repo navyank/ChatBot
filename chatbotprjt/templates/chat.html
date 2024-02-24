@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        background-color: #f1f1f1;
+    }
+    .chatbot-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+    }
+    .chatbot-icon {
+        width: 50px;
+        height: 50px;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+    .chatbot-window {
+        position: absolute;
+        bottom: 70px; /* Adjust as needed */
+        right: 0;
+        background-color: #fff;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        padding: 20px;
+        display: none;
+    }
+    .close-button {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<div class="chatbot-container">
+    <div class="chatbot-icon" onclick="toggleChatbot()">🤖</div>
+    <div class="chatbot-window" id="chatbotWindow">
+        <div class="close-button" onclick="toggleChatbot()">✖</div>
+        <!-- Insert your chatbot iframe or chat interface here -->
+        <iframe src="index.html" width="300" height="400"></iframe>
+    </div>
+</div>
+
+<script>
+    function toggleChatbot() {
+        var chatbotWindow = document.getElementById("chatbotWindow");
+        if (chatbotWindow.style.display === "none") {
+            chatbotWindow.style.display = "block";
+        } else {
+            chatbotWindow.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>

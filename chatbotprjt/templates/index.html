@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot</title>
+  <!-- Link to Font Awesome CDN for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .suggestion {
+        cursor: pointer;
+        background-color: #c9e1e6;
+        color: #111111;
+        margin-right: auto; /* Align to the right */
+    }
+    .chat-container {
+      width: 400px;
+      height: 400px; /* Adjust the height as needed */
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-header {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+    .chat-body {
+      flex-grow: 1;
+      padding: 10px;
+      overflow-y: auto; /* Always show scrollbar */
+    }
+    .chat-message {
+      background-color: #f2f2f2;
+      border-radius: 5px;
+      padding: 8px;
+      margin-bottom: 5px;
+      max-width: 70%;
+    }
+    .user-message {
+        background-color: #f2ccf2;
+        color: #302c2c;
+        text-align: right;
+        align-self: flex-end; /* Right side */
+        margin-left: auto;
+      }
+    .bot-message {
+      background-color: #c9e1e6;
+      color: #111111;
+      align-self: flex-start;
+    }
+    .input-container {
+      display: flex;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-top: 1px solid #ccc;
+    }
+    .chat-input {
+      flex-grow: 1;
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+    }
+    .send-button, .clear-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 8px;
+      margin-left: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+    <div class="chat-container">
+      <div class="chat-header">
+        Chatbot
+      </div>
+      <div class="chat-body" id="chatBody">
+        <div class="chat-message bot-message">Hello! How can I assist you today?</div>
+      </div>
+      <div class="input-container">
+        <input type="text" class="chat-input" id="userInput" placeholder="Type your message...">
+        <!-- Use an icon for sending -->
+        <button class="send-button" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        <!-- Use an icon for clearing messages -->
+        <button class="clear-button" onclick="clearMessages()"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+
+  
+    <script>
+      function sendMessage() {
+        var userInput = document.getElementById("userInput").value;
+        var chatBody = document.getElementById("chatBody");
+    
+        var userMessage = '<div class="chat-message user-message">' + userInput + '</div>';
+        userInput = userInput.replace(/[^\w\s]/gi, ''); 
+        chatBody.innerHTML += userMessage;
+        
+        var greetings = ["hello", "good morning",'hey','good afternoon','good evening','howdy',"whats up",'yo']; // Make all greetings lowercase
+        if (greetings.includes(userInput.toLowerCase())) {
+            var response = userInput.charAt(0).toUpperCase() + userInput.slice(1);
+            var botMessage = '<div class="chat-message bot-message">' + response + ', how may we assist you? Are you looking for a language tutor?</div>';
+            chatBody.innerHTML += botMessage;
+            chatBody.scrollTop = chatBody.scrollHeight;
+            document.getElementById("userInput").value = "";
+            return;
+        }
+        
+        fetch('qa.json')
+            .then(response => response.json())
+            .then(data => {
+                var found = false;
+                data.forEach(item => {
+                    if (userInput.toLowerCase().includes(item.question.toLowerCase())) {
+                        var botMessage = '<div class="chat-message bot-message">' + item.answer + '</div>';
+                        chatBody.innerHTML += botMessage;
+                        found = true;
+                    }
+                });
+                if (!found) {
+                    var botMessage = '<div class="chat-message bot-message">Sorry, I cannot have an answer for the question right now.</div>';
+                    chatBody.innerHTML += botMessage;
+    
+                    // Show suggestions based on user input
+                    data.forEach(item => {
+                        if (item.question.toLowerCase().includes(userInput.toLowerCase())) {
+                            var suggestion = '<div class="chat-message bot-message suggestion" onclick="selectSuggestion(\'' + item.question + '\')">' + item.question + '</div>';
+                            chatBody.innerHTML += suggestion;
+                        }
+                    });
+                }
+                chatBody.scrollTop = chatBody.scrollHeight;
+            })
+            .catch(error => {
+                console.error('Error fetching JSON:', error);
+                // Display error message if JSON data cannot be fetched
+                var botMessage = '<div class="chat-message bot-message">Sorry, I cannot retrieve the data right now.</div>';
+                chatBody.innerHTML += botMessage;
+                chatBody.scrollTop = chatBody.scrollHeight;
+            });
+    
+        document.getElementById("userInput").value = "";
+    }
+    
+    function clearMessages() {
+        var chatBody = document.getElementById("chatBody");
+        // Remove all chat messages except the default message
+        var chatMessages = chatBody.querySelectorAll('.chat-message');
+        for (var i = 0; i < chatMessages.length; i++) {
+            if (chatMessages[i].textContent.trim() !== "Hello! How can I assist you today?") {
+                chatMessages[i].remove();
+            }
+        }
+    }
+    
+    function selectSuggestion(question) {
+        document.getElementById("userInput").value = question;
+    }
+</script>    
+    
+    <!-- <script>
+        function sendEmail() {
+            var userEmail = document.getElementById("userEmail").value;
+            // Perform further actions with the user's email (e.g., send it to a server)
+            console.log("User's Email:", userEmail);
+            // You can also clear the email input field after submission if needed
+            document.getElementById("userEmail").value = "";
+          }
+    </script> -->
+  </body>
+  </html>

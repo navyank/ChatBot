@@ -1,0 +1,34 @@
+  [
+      {
+        "question": "What is your name",
+        "answer": "My name is Chatbot."
+      },
+      {
+        "question": "about",
+        "answer": "The TUTOROO Team typically replies in a few minutes."
+      },
+      {
+        "question": "about",
+        "answer": "Please provide your email address: <input type='email' id='userEmail' placeholder='Enter your email address'> <button onclick='sendEmail()'>Send</button>"
+      },
+      
+      {
+        "question": "How are you",
+        "answer": "I'm doing well, thank you!"
+      },
+      {
+        "question": "What time is it",
+        "answer": "I don't have the capability to tell time."
+      },
+      {
+        "question": "Hi",
+        "answer": "Hi, how may we assist you? Are you looking for a language tutor"
+      },
+      {
+      "question": "maths tutor",
+      "answer": "<p>Hi! You may select your preferred tutor through the link and inquire directly.</p> <br>Just click on the CONTACT NOW button and fill out the form and<br>you will receive an email message with a link where you can chat with your chosen tutor once the form has been completed.<br>There is no introduction fee, you only pay for the lessons you take.<br>﻿Likewise, I have forwarded your information to our Team and they will be in contact with you within 24 hours to assist you further in finding a tutor. Have a lovely day!😊<a href='https://www.tutoroo.co/english-tutor-singapore' target='_blank'>click here to chat with tutor</a>."
+      }
+     
+    ]
+   
+    
